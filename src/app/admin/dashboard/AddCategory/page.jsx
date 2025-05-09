@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import axios from 'axios';
 
 export default function AddCategoryForm() {
   const [name, setName] = useState('');
@@ -37,36 +38,35 @@ export default function AddCategoryForm() {
     setError('');
   };
 
-  const handleSubmit = (e) => {
-    if (e) e.preventDefault();
-    setError('');
-    
-    // Validation
-    if (!name.trim()) {
-      setError('Category name is required');
-      return;
+const  handleSubmit = async (e) =>{
+  e.preventDefault();
+
+  const formData = new FormData();
+  console.log(formData);
+
+  formData.append("name", name);
+  formData.append("description", description);
+  formData.append("image", image);
+  
+  try {
+    const response = await axios.post("/api/AddCategory", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(response);
+    if (response.status === 200) {
+      console.log("category in successful:", response);
     }
     
-    // Simulate form submission
-    setIsSubmitting(true);
-    
-    // Mock API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      
-      // Reset success state after 3 seconds
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 3000);
-      
-      // Reset form
-      resetForm();
-      
-      console.log('Form submitted:', { name, description, image });
-    }, 1500);
-  };
+  } catch (error) {
+    console.error("Error:", error);
+  }
 
+
+}
+
+  
   return (
     <div className="w-full  mx-auto">
       <Card className="shadow-md">

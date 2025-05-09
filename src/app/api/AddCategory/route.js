@@ -1,4 +1,6 @@
 import { dbConnect } from "@/lib/dbConnect";
+import uploadImage from "@/lib/uploadImage";
+import categoryModels from "@/Models/categoryModels";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -8,40 +10,39 @@ export async function POST(req) {
     const name = formData.get("name");
     const description = formData.get("description");
     const image = formData.get("image");
-  
 
     if (!name || !description || !image) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
-      )}
-
-      console.log("Database is connecting............")
-        await dbConnect();
-    console.log("Database is connected.....")
-
-   
-    const imageURL = await uploadImage(image, "image");
-    console.log(imageURL);
-    if (!imageURL) {
-      return NextResponse.json(
-        { message: "Image upload failed" },
-        { status: 500 }
       );
     }
 
-    const newcategory = new categoryModal({
+    console.log("Database is connecting............");
+    await dbConnect();
+    console.log("Database is connected.....");
+
+    const imageURL = await uploadImage(image, "Categoryimage");
+    console.log("Image uploaded:", imageURL);
+
+    if (!imageURL) {
+      return NextResponse.json(
+        { message: "Image upload failed" },
+        { status: 400 }
+      );
+    }
+
+    const newCategory = new categoryModels({
       name,
       description,
       image: imageURL.secure_url,
     });
-    console.log(newcategory);
 
-    const savedBlog = await newBlog.save();
-    
+    const savedCategory = await newCategory.save(); // ✅ FIXED: save from instance
+    console.log("Saved category:", savedCategory);
 
     return NextResponse.json(
-      { message: "category added successfully", data: savedcategory },
+      { message: "Category added successfully", data: savedCategory },
       { status: 200 }
     );
   } catch (error) {
@@ -53,6 +54,8 @@ export async function POST(req) {
   }
 }
 
+
+
 export async function GET(req, res) {
   try {
     console.log("connecting to db");
@@ -60,14 +63,14 @@ export async function GET(req, res) {
     await dbConnect();
     console.log("connected to db");
 
-    const allcategory = await categoryModal.find();
+    const allCategory = await categoryModels.find();
 
-    if (!allcategory) {
+    if (!allCategory) {
       return NextResponse.json({ message: "not found" }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: "category fetched sucessfully", data: allcategory },
+      { message: "Category fetched sucessfully", data: allCategory},
       { status: 200 }
     );
   } catch (error) {
