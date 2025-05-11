@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 const SignUp = () => {
+  
   return (
     <motion.section
       className="min-h-screen flex items-center justify-center bg-gray-100 px-4"
