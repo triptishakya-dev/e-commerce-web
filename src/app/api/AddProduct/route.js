@@ -11,11 +11,20 @@ export async function POST(req) {
     const name = formData.get("name");
     const description = formData.get("description");
     const image = formData.get("image");
-    const price = formData.get("Price");
+    const price = formData.get("price");
     const discountPrice = formData.get("discountPrice");
     const colour = formData.get("colour");
     const material = formData.get("material");
     const category = formData.get("category");
+
+    console.log(name)
+    console.log(description)
+    console.log(image)
+    console.log(price)
+    console.log(discountPrice)
+    console.log(colour)
+    console.log(material)
+    console.log(category)
 
     if (
       !name ||

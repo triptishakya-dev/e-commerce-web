@@ -1,4 +1,3 @@
-import { number } from "framer-motion";
 import mongoose from "mongoose";
 
 const productSchema = mongoose.Schema(
@@ -8,21 +7,25 @@ const productSchema = mongoose.Schema(
       required: true,
     },
 
-    description: {
+    category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "category",
+    },
+    description: {
+      type: String,
+      required: true,
     },
     image: {
       type: String,
       required: true,
     },
     price: {
-      type: number,
+      type: String,
       required: true,
     },
 
     discountPrice: {
-      type: number,
+      type: Number,
       required: true,
     },
     colour: {
@@ -40,4 +43,4 @@ const productSchema = mongoose.Schema(
 );
 
 export default mongoose.models.Product ||
-  mongoose.model("product", productSchema);
+  mongoose.model("Product", productSchema);

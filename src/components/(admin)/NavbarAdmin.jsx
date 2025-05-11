@@ -13,10 +13,6 @@ const NavbarAdmin = () => {
   const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.classList.toggle("dark", !darkMode);
-  };
 
   const handleLogout = async () => {
     try {
@@ -94,10 +90,10 @@ const NavbarAdmin = () => {
         {/* Logo Section */}
         <div className="flex items-center justify-center">
           <Image
-            src="/logo/cleanvedaLogo.png"
+            src="/logo.webp"
             alt="Logo"
-            width={80}
-            height={50}
+            width={30}
+            height={30}
             className="mr-4"
           />
         </div>

@@ -91,27 +91,31 @@ export default function ProductForm() {
   const handleSubmit = async () => {
     setLoading(true);
     setError("");
-
+    console.log("Submitting form with data:", formData);
+  
     try {
-      // Create FormData object for file upload
       const data = new FormData();
       for (const key in formData) {
         data.append(key, formData[key]);
       }
-
+  
+      console.log("FormData ready for submission:", [...data.entries()]);
+  
       const response = await fetch("/api/AddProduct", {
         method: "POST",
         body: data,
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to add product");
       }
-
+  
+      const resData = await response.json();
+      console.log("Product added successfully:", resData);
+  
       setSuccess(true);
       setLoading(false);
-
-      // Reset form after successful submission
+  
       setTimeout(() => {
         setFormData({
           name: "",
@@ -128,10 +132,12 @@ export default function ProductForm() {
         setStep(1);
       }, 3000);
     } catch (err) {
+      console.error("Error submitting product:", err);
       setError(err.message);
       setLoading(false);
     }
   };
+  
 
   const goToNextStep = () => {
     if (
