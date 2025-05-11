@@ -1,4 +1,4 @@
- import { dbConnect } from "@/lib/dbConnect";
+import { dbConnect } from "@/lib/dbConnect";
 import uploadImage from "@/lib/uploadImage";
 import productModels from "@/Models/productModels";
 
@@ -17,14 +17,14 @@ export async function POST(req) {
     const material = formData.get("material");
     const category = formData.get("category");
 
-    console.log(name)
-    console.log(description)
-    console.log(image)
-    console.log(price)
-    console.log(discountPrice)
-    console.log(colour)
-    console.log(material)
-    console.log(category)
+    console.log(name);
+    console.log(description);
+    console.log(image);
+    console.log(price);
+    console.log(discountPrice);
+    console.log(colour);
+    console.log(material);
+    console.log(category);
 
     if (
       !name ||

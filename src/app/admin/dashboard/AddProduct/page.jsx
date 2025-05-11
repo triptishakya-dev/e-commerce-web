@@ -92,30 +92,30 @@ export default function ProductForm() {
     setLoading(true);
     setError("");
     console.log("Submitting form with data:", formData);
-  
+
     try {
       const data = new FormData();
       for (const key in formData) {
         data.append(key, formData[key]);
       }
-  
+
       console.log("FormData ready for submission:", [...data.entries()]);
-  
+
       const response = await fetch("/api/AddProduct", {
         method: "POST",
         body: data,
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to add product");
       }
-  
+
       const resData = await response.json();
       console.log("Product added successfully:", resData);
-  
+
       setSuccess(true);
       setLoading(false);
-  
+
       setTimeout(() => {
         setFormData({
           name: "",
@@ -137,7 +137,6 @@ export default function ProductForm() {
       setLoading(false);
     }
   };
-  
 
   const goToNextStep = () => {
     if (

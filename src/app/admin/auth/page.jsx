@@ -26,7 +26,7 @@ const SignIn = () => {
       console.log(response);
       if (response.status === 200) {
         console.log("Sign in successful:", response);
-        router.push("/admin/addBlog");
+        router.push("/admin/dashboard");
       }
     } catch (error) {
       console.error("Error:", error);
