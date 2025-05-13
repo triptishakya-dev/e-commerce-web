@@ -12,18 +12,26 @@ const UserSchema = mongoose.Schema(
       required: true,
     },
 
-    mobileNo: {
-      type: number,
+    password: {
+      type: String,
       required: true,
     },
-    address: [{
+
+    mobileNo: {
+      type: Number,
+    },
+    address: [
+      {
         type: mongoose.Schema.ObjectId,
         ref: "Address",
-      }],
-    orders: [{
+      },
+    ],
+    orders: [
+      {
         type: mongoose.Schema.ObjectId,
         ref: "Order",
-      }],
+      },
+    ],
   },
   {
     timestamps: true,

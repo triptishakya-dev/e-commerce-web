@@ -1,51 +1,112 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import axios from "axios";
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 const SignUp = () => {
-  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    try {
+      const response = await axios.post("/api/signUp", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        setName("");
+        setEmail("");
+        setPassword("");
+      }
+    } catch (error) {
+      console.error("Error submitting data to the API:", error);
+    }
+  };
+
   return (
-    <motion.section
-      className="min-h-screen flex items-center justify-center bg-gray-100 px-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center mb-4">Create Account</h1>
-        <p className="text-sm text-neutral-600 text-center mb-6">
-          Join us today and discover your perfect pair of earrings!
-        </p>
+    <div className="min-h-screen w-full bg-white flex justify-center items-center px-4">
+      <Card className="w-full max-w-md border border-black shadow-md rounded-2xl">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl text-black">Register</CardTitle>
+          <p className="text-sm text-gray-600 mt-1">
+            Welcome! Please register to continue.
+          </p>
+        </CardHeader>
 
-        <form className="space-y-4">
-          <Input type="text" placeholder="Full Name" className="bg-gray-100" required />
-          <Input type="email" placeholder="Email" className="bg-gray-100" required />
-          <Input type="password" placeholder="Password" className="bg-gray-100" required />
-          <Input type="password" placeholder="Confirm Password" className="bg-gray-100" required />
+        <CardContent>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <Label htmlFor="name" className="text-black">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Type your Name"
+                className="text-black"
+                required
+              />
+            </div>
 
-          {/* Beautiful Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:from-purple-500 hover:to-pink-500"
-          >
-            Sign Up
-          </motion.button>
-        </form>
+            <div>
+              <Label htmlFor="email" className="text-black">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Type your Email"
+                className="text-black"
+                required
+              />
+            </div>
 
-        <Separator className="my-6" />
-        <p className="text-center text-sm text-neutral-600">
-          Already have an account?{" "}
-          <Link href={"/auth/SignIn"} className="text-blue-600 hover:underline">
-            Sign In
-          </Link>
-        </p>
-      </div>
-    </motion.section>
+            <div>
+              <Label htmlFor="password" className="text-black">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Type your password"
+                className="text-black"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-black text-white hover:bg-neutral-800"
+            >
+              Submit
+            </Button>
+          </form>
+           <p className="text-center text-sm text-black mt-6">
+            If you are already registered,{" "}
+            <Link href={"/auth/signIn"}>
+              <span className="text-blue-600 underline cursor-pointer">
+                sign here
+              </span>
+            </Link>
+            .
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

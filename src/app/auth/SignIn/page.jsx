@@ -1,51 +1,103 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 const SignIn = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    try {
+      const response = await axios.post("/api/signIn", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+
+      if (response.status === 200) {
+        const userId = response.data?.user?.id || "default";
+        router.push(`/user/${userId}`);
+      }
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
+  };
+
   return (
-    <motion.section
-      className="min-h-screen flex items-center justify-center bg-gray-100 px-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center mb-4">Sign In</h1>
-        <p className="text-sm text-neutral-600 text-center mb-6">
-          Welcome back! Please sign in to your account.
-        </p>
-
-        <form className="space-y-4">
-          <Input type="email" placeholder="Email" className="bg-gray-100" required />
-          <Input type="password" placeholder="Password" className="bg-gray-100" required />
-          <div className="flex justify-end text-sm text-blue-600 hover:underline">
-            <a href="#">Forgot password?</a>
-          </div>
-
-          {/* Beautiful Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:from-purple-500 hover:to-pink-500"
-          >
+    <div className="min-h-screen bg-white flex items-center justify-center px-4">
+      <Card className="w-full max-w-md shadow-lg rounded-2xl border border-gray-200">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center text-black">
             Sign In
-          </motion.button>
-        </form>
+          </CardTitle>
+        </CardHeader>
 
-        <Separator className="my-6" />
-        <p className="text-center text-sm text-neutral-600">
-          Don't have an account?{" "}
-          <Link href={"/auth/SignUp"} className="text-blue-600 hover:underline">
-            Sign Up
-          </Link>
-        </p>
-      </div>
-    </motion.section>
+        <CardContent>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-black">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="text-black"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-black">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="text-black"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-black text-white hover:bg-neutral-800"
+            >
+              Sign In
+            </Button>
+          </form>
+
+          <p className="text-center text-sm text-black mt-6">
+            If you are not registered,{" "}
+            <Link href={"/auth/signUp"}>
+              <span className="text-blue-600 underline cursor-pointer">
+                register here
+              </span>
+            </Link>
+            .
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

@@ -33,10 +33,10 @@ const Navbar = () => {
             </Link>
           ))}
           <Link
-            href="auth/SignIn"
+            href="auth/signIn"
             className="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition"
           >
-            Sign In
+            SignIn
           </Link>
         </div>
 
