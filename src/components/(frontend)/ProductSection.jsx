@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import Link from "next/link";
 
 const ProductSection = () => {
   const [products, setProducts] = useState([]);
@@ -73,6 +74,9 @@ const ProductSection = () => {
                   key={index} 
                   className="overflow-hidden h-full border border-gray-200 rounded-lg hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
+                  <Link href={`/Product/${product._id}`}>
+                  
+                  
                   <div className="relative p-6 bg-gray-50 flex items-center justify-center">
                     {discountPercentage > 0 && (
                       <Badge className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 px-2 py-1 text-xs font-bold">
@@ -123,6 +127,7 @@ const ProductSection = () => {
                       </button>
                     </div>
                   </CardContent>
+                  </Link>
                 </Card>
               );
             })}
