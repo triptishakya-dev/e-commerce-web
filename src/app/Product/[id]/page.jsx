@@ -5,11 +5,54 @@ import Image from "next/image";
 import { MoonLoader } from "react-spinners";
 import { useParams } from "next/navigation";
 import RelatedProducts from "@/components/(frontend)/RelatedProducts";
+import Link from "next/link";
 
 const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1); // ✅ Quantity state
   const params = useParams();
+
+  const handlecart = () => {
+    const cartData = {
+      id: params.id,
+      quantity: quantity,
+    };
+
+    // Retrieve the existing cart from localStorage
+    let existingCart = localStorage.getItem("cart");
+    console.log(existingCart)
+
+    try {
+      // Parse the cart if it exists and is valid JSON, otherwise initialize an empty array
+      existingCart = existingCart ? JSON.parse(existingCart) : [];
+      
+    } catch (e) {
+      // If parsing fails, initialize as an empty array
+      existingCart = [];
+    }
+
+    // Ensure existingCart is an array
+    if (!Array.isArray(existingCart)) {
+      existingCart = [];
+    }
+
+    // Check if the product is already in the cart
+    const existingProductIndex = existingCart.findIndex(
+      (item) => item.id === params.id
+    );
+
+    if (existingProductIndex !== -1) {
+      // If the product is already in the cart, update its quantity
+      existingCart[existingProductIndex].quantity += quantity;
+    } else {
+      // If the product is not in the cart, add it
+      existingCart.push(cartData);
+    }
+
+    // Update the cart in localStorage
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,6 +70,17 @@ const ProductPage = () => {
     fetchProduct();
   }, [params.id]);
 
+  // ✅ Quantity handlers
+  const handleIncrease = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 text-black px-4 sm:px-10 py-10 sm:py-16">
       {loading ? (
@@ -39,7 +93,9 @@ const ProductPage = () => {
           {/* Left Side - Details */}
           <div className="md:w-1/2 flex flex-col justify-between space-y-6">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-2">{product.name}</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+                {product.name}
+              </h1>
               <p className="text-xl font-semibold text-rose-600 mb-4">
                 ₹{product.price}{" "}
                 {product.discountPrice && (
@@ -48,15 +104,41 @@ const ProductPage = () => {
                   </span>
                 )}
               </p>
-              <p className="text-gray-700 leading-relaxed">{product.description}</p>
+              <p className="text-gray-700 leading-relaxed">
+                {product.description}
+              </p>
               <div className="mt-4 text-sm text-gray-500">
-                <p><strong>Material:</strong> {product.material}</p>
-                <p><strong>Color:</strong> {product.colour}</p>
+                <p>
+                  <strong>Material:</strong> {product.material}
+                </p>
+                <p>
+                  <strong>Color:</strong> {product.colour}
+                </p>
+              </div>
+
+              {/* ✅ Quantity Selector */}
+              <div className="mt-6 flex items-center gap-4">
+                <button
+                  onClick={handleDecrease}
+                  className="px-3 py-1 bg-gray-200 text-black rounded hover:bg-gray-300"
+                >
+                  −
+                </button>
+                <span className="font-medium text-lg">{quantity}</span>
+                <button
+                  onClick={handleIncrease}
+                  className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-900"
+                >
+                  +
+                </button>
               </div>
             </div>
 
-            <button className="mt-6 bg-black text-white py-3 px-6 rounded hover:bg-gray-800 transition">
-              Order Now
+            <button
+              onClick={handlecart}
+              className="mt-6 bg-black text-white py-3 px-6 rounded hover:bg-gray-800 transition"
+            >
+              Add to cart
             </button>
           </div>
 
@@ -74,9 +156,8 @@ const ProductPage = () => {
       ) : (
         <p className="text-center text-gray-500">No product found.</p>
       )}
-      <RelatedProducts/>
+      <RelatedProducts />
     </div>
-    
   );
 };
 
