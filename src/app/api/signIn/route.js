@@ -1,7 +1,5 @@
 import { dbConnect } from "@/lib/dbConnect";
-
 import bcrypt from "bcrypt";
-
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import userModels from "@/Models/userModels";
@@ -29,17 +27,26 @@ export async function POST(req, res) {
 
     const user = await userModels.findOne({ email });
     if (!user || !user.password) {
-      return NextResponse.json({ message: "User not found or password missing" }, { status: 404 });
+      return NextResponse.json(
+        { message: "User not found or password missing" },
+        { status: 404 }
+      );
     }
-    console.log(user)
-    
+    console.log(user);
+
     if (!password) {
-      return NextResponse.json({ message: "Password not provided in form" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Password not provided in form" },
+        { status: 400 }
+      );
     }
-    
+
     const isMatched = await bcrypt.compare(password, user.password);
-    if(!isMatched){
-        return NextResponse.json({ message: "Password not matched" }, { status: 400 });   
+    if (!isMatched) {
+      return NextResponse.json(
+        { message: "Password not matched" },
+        { status: 400 }
+      );
     }
     // set cookies in the brower
     console.log("Generating token ");

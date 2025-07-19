@@ -29,8 +29,7 @@ const SignIn = () => {
       console.log(response);
 
       if (response.status === 200) {
-        const userId = response.data?.user?.id || "default";
-        router.push(`/user/${userId}`);
+        router.push("/");
       }
     } catch (error) {
       console.error("Error during sign-in:", error);

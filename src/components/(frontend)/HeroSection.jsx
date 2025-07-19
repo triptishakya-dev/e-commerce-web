@@ -5,7 +5,7 @@ import { FaGem } from 'react-icons/fa';
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-b from-pink-50 to-white dark:from-neutral-900 dark:to-neutral-950 py-20 px-6">
+    <section className="bg-gray-200 py-20 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         {/* Left Content */}
         <motion.div
@@ -18,10 +18,10 @@ const HeroSection = () => {
             <FaGem className="text-xl" />
             <span className="uppercase text-sm font-medium tracking-wider">Elegant Collection</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-white leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-black">
             Discover Your Sparkle
           </h1>
-          <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-300 max-w-xl">
+          <p className="mt-4 text-lg text-black  max-w-xl">
             Handcrafted earrings that redefine elegance. Explore our exclusive new arrivals and timeless classics.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
